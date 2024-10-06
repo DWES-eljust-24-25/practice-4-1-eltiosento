@@ -11,10 +11,8 @@ if (isset($_SESSION['contacts'])) {
     echo "<p>Birthdate: " . $contacts['birthdate'] . "</p>";
     echo "<p>Phone: " . $contacts['phone'] . "</p>";
     echo "<p>Email: " . $contacts['email'] . "</p>";
-    if (!empty($contacts['types'])) {
-        echo "<p>Types: " . implode(", ", $contacts['types']) . "</p>";
-    } else {
-        echo "<p>Types: None</p>";
-    }
+    echo "<p>Favourite: " . ($contacts['favourite'] ? 'Yes' : 'No') . "</p>";
+    echo "<p>Important: " . ($contacts['important'] ? 'Yes' : 'No') . "</p>";
+    echo "<p>Archived: " . ($contacts['archived'] ? 'Yes' : 'No') . "</p>";
 }
 session_destroy();

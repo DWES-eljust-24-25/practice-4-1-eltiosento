@@ -1,13 +1,25 @@
 <?php
 //In this script do the self-validated form
 
-//$contacts = require_once __DIR__ . '/data.php';
-
 require_once __DIR__ . '/functions.php';
 session_start();
 
+$contactsArray = require_once __DIR__ . '/data.php';
+
 $contacts = [];
 $errors = [];
+
+// Comprovar si hi ha un ID passat per URL
+if (isset($_GET['id'])) {
+    $id = (int)$_GET['id'];
+    // Busquem el contacte corresponent a l'ID
+    foreach ($contactsArray as $contact) {
+        if ($contact['id'] === $id) {
+            $contacts = $contact;
+            break;
+        }
+    }
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -18,7 +30,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $contacts['birthdate'] = $_POST['birthdate'];
     $contacts['phone'] = trim(strip_tags($_POST['phone']));
     $contacts['email'] = trim(strip_tags($_POST['email']));
-    $contacts['types'] = $_POST['types'] ?? [];
+    $contacts['favourite'] = $_POST['favourite'] ?? false;
+    $contacts['important'] = $_POST['important'] ?? false;
+    $contacts['archived'] = $_POST['archived'] ?? false;
 
     $errors = validateContact($contacts);
 
@@ -67,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
         <div>
             <label for="id">ID</label>
-            <input type="text" id="id" name="id" value="0" readonly>
+            <input type="text" id="id" name="id" value="<?= $contacts['id'] ?? '0'; ?>" readonly>
         </div>
         <br>
         <div>
@@ -107,17 +121,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <br>
         <div>
             <label>Type</label><br>
-            <input type="checkbox" id="favourite" name="types[]" value="Favourite" <?php if (in_array('Favourite', $contacts['types'] ?? [])) echo 'checked'; ?>>
+            <input type="checkbox" id="favourite" name="favourite" value="true" <?= ($contacts['favourite'] ?? false) ? 'checked' : ''; ?>>
             <label for="favourite">Favourite</label><br>
-            <input type="checkbox" id="important" name="types[]" value="Important" <?php if (in_array('Important', $contacts['types'] ?? [])) echo 'checked'; ?>>
+            <input type="checkbox" id="important" name="important" value="true" <?= ($contacts['important'] ?? false) ? 'checked' : ''; ?>>
             <label for="important">Important</label><br>
-            <input type="checkbox" id="archived" name="types[]" value="Archived" <?php if (in_array('Archived', $contacts['types'] ?? [])) echo 'checked'; ?>>
+            <input type="checkbox" id="archived" name="archived" value="true" <?= ($contacts['archived'] ?? false) ? 'checked' : ''; ?>>
             <label for="archived">Archived</label><br>
         </div>
         <br>
         <div>
-            <input type="submit" value="Save">
-            <input type="submit" value="Update" disabled>
+            <input type="submit" value="Save" <?= (($contacts['id'] ?? 0) === 0) ? '' : 'disabled' ?>>
+            <input type="submit" value="Update" <?= (($contacts['id'] ?? 0) !== 0) ? '' : 'disabled' ?>>
             <input type="submit" value="Delete" disabled>
         </div>
     </form>
