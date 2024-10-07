@@ -64,17 +64,7 @@ function showTable(array $data, ?array $optionalHeader = null): void
         }
         */
     }
-    echo '<style>
-    table {
-        text-align: center;
-        margin: 15 auto;
-    }
-        th {
-        background-color: yellow;
-    }
-    </style>';
 
-    echo '<body>';
     // Una altra forma de pintar una taula clavant l'estil dintre de l'etiqueta
     echo '<table border="1" cellpadding="5" cellspacing="0">';
 
@@ -131,5 +121,4 @@ function showTable(array $data, ?array $optionalHeader = null): void
 
 
     echo '</table>';
-    echo '</body>';
 }

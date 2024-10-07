@@ -1,6 +1,13 @@
 <?php
 //This script is to show the validated data from contact.php
 session_start();
+
+// variables per la capçalera i el peu de pàgina
+$pageTitle = 'Practice 4.1. Forms - Check Data';
+$authorName = 'Vicent Roselló';
+
+include __DIR__ . '/head.part.php';
+
 if (isset($_SESSION['contacts'])) {
     $contacts = $_SESSION['contacts'];
     echo "<h2>No errors!</h2>";
@@ -15,4 +22,7 @@ if (isset($_SESSION['contacts'])) {
     echo "<p>Important: " . ($contacts['important'] ? 'Yes' : 'No') . "</p>";
     echo "<p>Archived: " . ($contacts['archived'] ? 'Yes' : 'No') . "</p>";
 }
+
+include __DIR__ . '/footer.part.php';
+
 session_destroy();
